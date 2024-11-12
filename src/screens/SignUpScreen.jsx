@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
+import InputField from '../components/InputField';
+import Button from '../components/Button';
+import ErrorText from '../components/ErrorText';
 
 const SignUpScreen = ({ navigation }) => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -27,67 +30,48 @@ const SignUpScreen = ({ navigation }) => {
       >
         {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
           <>
-            {/* Name Input */}
-            <View style={styles.inputContainer}>
-              <TextInput
-                style={styles.input}
-                placeholder="Name"
-                placeholderTextColor="#888"
-                value={values.name}
-                onChangeText={handleChange('name')}
-                onBlur={handleBlur('name')}
-              />
-            </View>
-            {touched.name && errors.name && (
-              <Text style={styles.errorText}>{errors.name}</Text>
-            )}
+            {/* Name Input using InputField component */}
+            <InputField
+              placeholder="Name"
+              value={values.name}
+              onChangeText={handleChange('name')}
+              onBlur={handleBlur('name')}
+              placeholderTextColor="#888"
+            />
+            <ErrorText error={touched.name && errors.name} />
 
-            {/* Email Input */}
-            <View style={styles.inputContainer}>
-              <TextInput
-                style={styles.input}
-                placeholder="Email"
-                placeholderTextColor="#888"
-                value={values.email}
-                onChangeText={handleChange('email')}
-                onBlur={handleBlur('email')}
-                keyboardType="email-address"
-                autoCapitalize="none"
-              />
-            </View>
-            {touched.email && errors.email && (
-              <Text style={styles.errorText}>{errors.email}</Text>
-            )}
+            {/* Email Input using InputField component */}
+            <InputField
+              placeholder="Email"
+              value={values.email}
+              onChangeText={handleChange('email')}
+              onBlur={handleBlur('email')}
+              placeholderTextColor="#888"
+              keyboardType="email-address"
+            />
+            <ErrorText error={touched.email && errors.email} />
 
-            {/* Password Input */}
-            <View style={styles.inputContainer}>
-              <TextInput
-                style={styles.input}
-                placeholder="Password"
-                placeholderTextColor="#888"
-                value={values.password}
-                onChangeText={handleChange('password')}
-                onBlur={handleBlur('password')}
-                secureTextEntry={!isPasswordVisible}
-                autoCapitalize="none"
-              />
-              <TouchableOpacity
-                style={styles.toggleButton}
-                onPress={() => setIsPasswordVisible(!isPasswordVisible)}
-              >
-                <Text style={styles.toggleButtonText}>
-                  {isPasswordVisible ? "Hide" : "Show"}
-                </Text>
-              </TouchableOpacity>
-            </View>
-            {touched.password && errors.password && (
-              <Text style={styles.errorText}>{errors.password}</Text>
-            )}
-
-            {/* Sign Up Button */}
-            <TouchableOpacity style={styles.loginButton} onPress={handleSubmit}>
-              <Text style={styles.loginButtonText}>Sign Up</Text>
+            {/* Password Input using InputField component */}
+            <InputField
+              placeholder="Password"
+              value={values.password}
+              onChangeText={handleChange('password')}
+              onBlur={handleBlur('password')}
+              placeholderTextColor="#888"
+              secureTextEntry={!isPasswordVisible}
+            />
+            <TouchableOpacity
+              style={styles.toggleButton}
+              onPress={() => setIsPasswordVisible(!isPasswordVisible)}
+            >
+              <Text style={styles.toggleButtonText}>
+                {isPasswordVisible ? "Hide" : "Show"}
+              </Text>
             </TouchableOpacity>
+            <ErrorText error={touched.password && errors.password} />
+
+            {/* Sign Up Button using Button component */}
+            <Button title="Sign Up" onPress={handleSubmit} />
           </>
         )}
       </Formik>
@@ -95,13 +79,10 @@ const SignUpScreen = ({ navigation }) => {
       {/* Navigate to Login Button */}
       <View style={styles.footer}>
         <Text style={styles.footerText}>Already have an account? </Text>
-      </View>
-
-      <View>
         <TouchableOpacity onPress={() => navigation.navigate('Login')}>
           <Text style={styles.footerLink}>Login</Text>
         </TouchableOpacity>
-        </View>
+      </View>
     </View>
   );
 };
@@ -125,51 +106,15 @@ const styles = StyleSheet.create({
     color: '#777',
     marginBottom: 20,
   },
-  inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#fff',
-    borderRadius: 10,
-    paddingHorizontal: 15,
-    paddingVertical: 10,
-    width: '100%',
-    marginVertical: 10,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 3, // For Android shadow
-  },
-  input: {
-    flex: 1,
-    fontSize: 16,
-    color: '#333',
-  },
   toggleButton: {
     paddingHorizontal: 10,
+    marginTop: -20,
+    marginBottom: 20,
   },
   toggleButtonText: {
     color: '#007BFF',
     fontSize: 14,
     fontWeight: '500',
-  },
-  loginButton: {
-    backgroundColor: '#007BFF',
-    borderRadius: 10,
-    width: '100%',
-    paddingVertical: 15,
-    alignItems: 'center',
-    marginVertical: 20,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.3,
-    shadowRadius: 5,
-    elevation: 5,
-  },
-  loginButtonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
   },
   footer: {
     flexDirection: 'row',
@@ -182,16 +127,9 @@ const styles = StyleSheet.create({
     color: '#777',
   },
   footerLink: {
-    marginTop: 0.5,
     color: '#007BFF',
     fontSize: 16,
     fontWeight: '500',
-  },
-  errorText: {
-    color: 'red',
-    fontSize: 12,
-    marginBottom: 5,
-    alignSelf: 'flex-start',
   },
 });
 
