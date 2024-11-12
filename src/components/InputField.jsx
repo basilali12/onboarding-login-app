@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, TextInput, StyleSheet } from 'react-native';
 
-const InputField = ({ placeholder, value, onChangeText, secureTextEntry, onBlur, placeholderTextColor = "#888" }) => {
+const InputField = ({ placeholder, value, onChangeText, onBlur, placeholderTextColor, keyboardType, secureTextEntry }) => {
   return (
     <View style={styles.inputContainer}>
       <TextInput
@@ -10,9 +10,9 @@ const InputField = ({ placeholder, value, onChangeText, secureTextEntry, onBlur,
         placeholderTextColor={placeholderTextColor}
         value={value}
         onChangeText={onChangeText}
-        secureTextEntry={secureTextEntry}
         onBlur={onBlur}
-        autoCapitalize="none"
+        keyboardType={keyboardType}
+        secureTextEntry={secureTextEntry}
       />
     </View>
   );
@@ -20,6 +20,8 @@ const InputField = ({ placeholder, value, onChangeText, secureTextEntry, onBlur,
 
 const styles = StyleSheet.create({
   inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
     backgroundColor: '#fff',
     borderRadius: 10,
     paddingHorizontal: 15,
@@ -33,6 +35,7 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   input: {
+    flex: 1,
     fontSize: 16,
     color: '#333',
   },

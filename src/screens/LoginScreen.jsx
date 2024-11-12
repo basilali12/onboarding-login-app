@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
+import LottieView from 'lottie-react-native';
 import InputField from '../components/InputField';
 import Button from '../components/Button';
 import ErrorText from '../components/ErrorText';
@@ -9,7 +10,6 @@ import ErrorText from '../components/ErrorText';
 const LoginScreen = () => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
-  // Validation schema using Yup
   const validationSchema = Yup.object().shape({
     email: Yup.string().email('Invalid email address').required('Email is required'),
     password: Yup.string().min(6, 'Password must be at least 6 characters').required('Password is required'),
@@ -17,6 +17,15 @@ const LoginScreen = () => {
 
   return (
     <View style={styles.container}>
+      {/* Snowflake Animation Background */}
+      <LottieView
+        source={require('../animation/snowflakes.json')}
+        speed={0.5} // Slow down the animation speed
+        autoPlay
+        loop
+        style={styles.animation}
+      />
+
       <Text style={styles.title}>Login</Text>
       <Text style={styles.subtitle}>Login to continue</Text>
 
@@ -29,47 +38,44 @@ const LoginScreen = () => {
       >
         {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
           <>
-            {/* Email Input using InputField component */}
             <InputField
               placeholder="Email"
               value={values.email}
               onChangeText={handleChange('email')}
               onBlur={handleBlur('email')}
-              placeholderTextColor="#888"
+              placeholderTextColor="#bbb"
               keyboardType="email-address"
             />
             <ErrorText error={touched.email && errors.email} />
 
-            {/* Password Input using InputField component */}
-            <InputField
-              placeholder="Password"
-              value={values.password}
-              onChangeText={handleChange('password')}
-              onBlur={handleBlur('password')}
-              placeholderTextColor="#888"
-              secureTextEntry={!isPasswordVisible}
-            />
-            <TouchableOpacity
-              style={styles.toggleButton}
-              onPress={() => setIsPasswordVisible(!isPasswordVisible)}
-            >
-              <Text style={styles.toggleButtonText}>
-                {isPasswordVisible ? "Hide" : "Show"}
-              </Text>
-            </TouchableOpacity>
+            <View style={styles.passwordContainer}>
+              <InputField
+                placeholder="Password"
+                value={values.password}
+                onChangeText={handleChange('password')}
+                onBlur={handleBlur('password')}
+                placeholderTextColor="#bbb"
+                secureTextEntry={!isPasswordVisible}
+              />
+              <TouchableOpacity
+                style={styles.toggleButton}
+                onPress={() => setIsPasswordVisible(!isPasswordVisible)}
+              >
+                <Text style={styles.toggleButtonText}>
+                  {isPasswordVisible ? "Hide" : "Show"}
+                </Text>
+              </TouchableOpacity>
+            </View>
             <ErrorText error={touched.password && errors.password} />
 
-            {/* Login Button using Button component */}
-            <Button title="Login" onPress={handleSubmit} />
-
+            <Button title="Login" onPress={() => {console.log("Login button pressed"); handleSubmit();}} />
           </>
         )}
       </Formik>
 
-      {/* Forgot Password Link */}
       <View style={styles.footer}>
-        <TouchableOpacity>
-          <Text style={styles.footerLink}>Forgot Password?</Text>
+      <TouchableOpacity onPress={() => {console.log("Forgot Password button pressed");}}>
+        <Text style={styles.footerLink}>Forgot Password?</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -81,24 +87,36 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#f2f2f2',
+    backgroundColor: 'black',
     paddingHorizontal: 20,
+  },
+  animation: {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    opacity: 0.5, // Adjust opacity for subtlety
   },
   title: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: '#333',
+    color: 'white',
     marginBottom: 10,
   },
   subtitle: {
     fontSize: 16,
-    color: '#777',
+    color: '#bbb',
     marginBottom: 20,
   },
+  passwordContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '100%',
+    position: 'relative',
+  },
   toggleButton: {
+    position: 'absolute',
+    right: 10,
     paddingHorizontal: 10,
-    marginTop: -20,
-    marginBottom: 20,
   },
   toggleButtonText: {
     color: '#007BFF',
